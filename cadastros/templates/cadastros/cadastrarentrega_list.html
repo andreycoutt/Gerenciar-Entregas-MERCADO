@@ -1,0 +1,147 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% if request.user.is_authenticated %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>Listagem de Entregas</title>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    h2 {
+      color: #343a40;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    table {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .btn {
+      flex: 0 0 48%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lista de Entregas</h2>
+
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Endereço</th>
+          <th>Caixas</th>
+          <th>Volume extra</th>
+          <th>Nome do embalador</th>
+          <th>Data de compra</th>
+          <th>Data de entrega</th>
+          <th>Opção</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entrega in object_list %}
+          <tr>
+            <td>
+              {{ entrega.nome }}
+            </td>
+            <td>
+              {{ entrega.endereco }}
+            </td>
+            <td>
+              {{ entrega.caixas }}
+            </td>
+            <td>
+              {{ entrega.volumeextra }}
+            </td>
+            <td>
+              {{ entrega.nomeembalador }}
+            </td>
+            <td>
+              {{ entrega.datacompra }}
+            </td>
+            <td>
+              {{ entrega.dataentrega }}
+            </td>
+            <td>
+              <div class="btn-group">
+                <a href="{% url 'excluir-entrega' entrega.pk %}" class="btn btn-danger btn-sm" title="Excluir"><i class="bi bi-trash"></i> Excluir</a>
+                <a href="{% url 'editar-entrega' entrega.pk %}" class="btn btn-warning btn-sm" title="Editar"><i class="bi bi-pencil"></i> Editar</a>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center">Nenhuma entrega registrada.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <a href="{% url 'cadastrar-entrega' %}" class="btn btn-success btn-sm">Cadastrar Entrega</a>
+    <a href="{% url 'index' %}" class="btn btn-dark btn-sm">Página Inicial</a>
+  </div>
+
+  <script>
+    (() => {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
+</body>
+</html>
+
+
+{% else %}
+<h1>voce nao esta logado, <a href="{% url 'login' %}">clique aqui</a> para fazer login</h1>
+
+{% endif %}
